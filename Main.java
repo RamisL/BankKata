@@ -20,6 +20,10 @@ public class Main extends Application {
         /// Declaration before loop
         boolean endOfSession = false;
         String userInput;
+        String name;
+        Integer balance;
+        Integer threshold;
+        Integer balance_modifier;
 
         // Loop
         while (!endOfSession) {
@@ -41,7 +45,33 @@ public class Main extends Application {
                     endOfSession = true;
                     b.closeDb();
                     break;
-                // TODO
+                // Processing user input
+
+                case "0":
+                    b.printAllAccounts();
+                    break;
+                case "1":
+                    System.out.println("Saisissez le nom de votre compte");
+                    name = s.nextLine();
+                    System.out.println("Saisissez le solde de votre compte");
+                    balance = s.nextInt();
+                    System.out.println("Saisissez le seuil de votre compte");
+                    threshold = s.nextInt();
+                    b.createNewAccount(name, balance, threshold);
+                    break;
+                case "2":
+                    System.out.println("Saisissez le nom du compte");
+                    name = s.nextLine();
+                    System.out.println("Saisissez le nouveau solde du compte");
+                    balance_modifier = s.nextInt();
+                    b.changeBalanceByName(name, balance_modifier);
+                    break;
+                case "3":
+                    System.out.println("Saisissez le nom du compte");
+                    name = s.nextLine();
+                    b.blockAccount(name);
+                    break;
+
             }
         }
 
