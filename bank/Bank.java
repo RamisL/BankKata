@@ -13,6 +13,9 @@ public class Bank {
     private static final String DB_URL = "jdbc:postgresql://localhost:5439/postgres";
     private static final String DB_USER = "postgres";
 
+
+
+
     /*
         Strings de connection à la base mysql, à décommenter et compléter avec votre nom de bdd et de user
      */
@@ -24,7 +27,7 @@ public class Bank {
 
     private static final String TABLE_NAME = "accounts";
 
-    private Connection c;
+   private Connection c;
 
     public Bank() {
         initDb();
@@ -68,23 +71,66 @@ public class Bank {
 
 
     public void createNewAccount(String name, int balance, int threshold) {
-        // TODO
+        try (Statement s = c.createStatement()) {
+            if(threshold <= 0){
+                String request =
+                "INSERT INTO public account " + "VALUE (name, balance, threshold, false)");
+                int rowCount = s.executeUpdate(
+                        request);
+                System.out.println(rowCount);
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
     }
 
     public String printAllAccounts() {
-        // TODO
+        String value = "";
+        try (Statement s = c.createStatement()) {
+            String query = "SELECT * FROM accounts";
 
-        return "";
+            ResultSet rs = s.executeQuery(query);
+
+            while (rs.next())
+            {
+                Account acc = new Account(rs.getString("name"), rs.getInt("balance"),rs.getInt("threshold"),rs.getBoolean("block"));
+                System.out.println(acc.toString());
+                value += acc.toString();
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return value;
     }
 
     public void changeBalanceByName(String name, int balanceModifier) {
-        // TODO
+        try (Statement s = c.createStatement()) {
+
+            String query = "UPDATE accounts "
+                    + "SET balance = balance + balanceModifier"
+                    + "WHERE name = 'name'"
+                    + "AND block = false "
+                    + "AND balance + balanceModifier > threshold";
+
+            s.executeUpdate(query);
+
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
     }
 
     public void blockAccount(String name) {
-        // TODO
-    }
+        try (Statement s = c.createStatement()) {
+            String query = "UPDATE accounts"
+                    + "SET block = true"
+                    + "WHERE name = 'name'";
+            System.out.println(query);
+            s.executeUpdate(query);
 
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+    }
     // For testing purpose
     String getTableDump() {
         String query = "select * from " + TABLE_NAME;
