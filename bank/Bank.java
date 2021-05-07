@@ -74,7 +74,7 @@ public class Bank {
         try (Statement s = c.createStatement()) {
             if(threshold <= 0){
                 String request =
-                "INSERT INTO public account " + "VALUE (name, balance, threshold, false)");
+                "INSERT INTO public account " + "VALUE (name, balance, threshold, false)";
                 int rowCount = s.executeUpdate(
                         request);
                 System.out.println(rowCount);
